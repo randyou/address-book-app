@@ -1,7 +1,7 @@
 {
   "name": "address-book-app",
   "version": "0.0.1",
-  "description": "A address book app.",
+  "description": "An address book app.",
   "main": "src/index.js",
   "author": "Randy Ou <ourd2012@gmail.com>",
   "license": "MIT",
