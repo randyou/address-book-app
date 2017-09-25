@@ -60,7 +60,12 @@ router.post('/auth/register', async (ctx, next) => {
 
       if (created) {
         ctx.status = 201
-        ctx.body = user
+        ctx.body = {
+          id: user.id,
+          username: user.username,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt
+        }
       } else {
         ctx.status = 409
         ctx.body = 'Username conflict'
