@@ -14,4 +14,11 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
   }
 });
 
+sequelize.authenticate().then(() => {
+  console.log("MySql connected ...");
+}).catch((err) => {
+  console.error(err);
+  throw err;
+});
+
 export default sequelize
