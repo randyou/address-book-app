@@ -46,20 +46,21 @@ const createContact = async (ctx, next) => {
     try {
       const contact = new Contact(obj)
       const ret = await contact.save()
+      ctx.status = 201
       ctx.rest({
         success: true,
         data: ret
       })
     } catch (error) {
       console.error(error)
-      ctx.status = 500
-      ctx.body = 'INTERNAL SERVER ERROR'
+      ctx.throw(500)
     }
   } else {
     ctx.status = 400
     ctx.body = {
       error: 'Name is required'
     }
+    return
   }
 }
 
@@ -119,7 +120,7 @@ const updateContact = async (ctx, next) => {
         contact.set(obj);
         const ret = await contact.save()
         ctx.status = 201
-        ctx.body = ret
+        ctx.body = ctx.rest(ret)
       } else {
         ctx.status = 403
         ctx.body = 'Forbidden'
@@ -129,8 +130,7 @@ const updateContact = async (ctx, next) => {
     }
   } catch (error) {
     console.error(error)
-    ctx.status = 500
-    ctx.body = 'INTERNAL SERVER ERROR'
+    ctx.throw(500)
   }
 }
 
