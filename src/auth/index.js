@@ -37,10 +37,14 @@ router.get('/auth/logout', async (ctx, next) => {
 router.post('/auth/register', async (ctx, next) => {
   const username = ctx.request.body.username || ''
   const password = ctx.request.body.password || ''
-  if (!username || !password) {
+  if (!/^[\w\d]{5,}$/i.test(username)) {
+    ctx.status = 400
     ctx.body = {
-      error: "INVALID REQUEST"
+      error:'Invalid username'
     }
+    return
+  }
+  if (!username || !password) {
     ctx.throw(400)
   } else {
     try {
@@ -69,7 +73,7 @@ router.post('/auth/register', async (ctx, next) => {
           updatedAt: user.updatedAt
         }
       } else {
-        ctx.status = 409
+        ctx.status = 400
         ctx.body = {
           error: 'Username conflict'
         }
@@ -77,8 +81,7 @@ router.post('/auth/register', async (ctx, next) => {
 
     } catch (err) {
       console.log(err)
-      ctx.status = 500
-      ctx.body = 'INTERNAL SERVER ERROR'
+      ctx.throw(500)
     }
   }
 })
