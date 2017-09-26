@@ -17,11 +17,14 @@ const formatBody = (body, obj) => {
  * @param {any} next
  */
 const getContacts = async (ctx, next) => {
+  const { limit = 1000, offset = 0, sort = '_id' } = ctx.request.query
   const user = ctx.req.user
-  const contacts = await Contact.find({ _owner: user.id })
+  const total = await Contact.where({ _owner: user.id }).count().exec()
+  const contacts = await Contact.find({ _owner: user.id }).skip(parseInt(offset)).limit(parseInt(limit)).sort(sort).exec()
   ctx.rest({
     success: true,
-    total: contacts.length,
+    total: total,
+    offset: offset,
     data: contacts
   })
 }
