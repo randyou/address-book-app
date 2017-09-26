@@ -38,8 +38,10 @@ router.post('/auth/register', async (ctx, next) => {
   const username = ctx.request.body.username || ''
   const password = ctx.request.body.password || ''
   if (!username || !password) {
+    ctx.body = {
+      error: "INVALID REQUEST"
+    }
     ctx.throw(400)
-    ctx.body = 'INVALID REQUEST'
   } else {
     try {
       const now = Date.now()
@@ -68,7 +70,9 @@ router.post('/auth/register', async (ctx, next) => {
         }
       } else {
         ctx.status = 409
-        ctx.body = 'Username conflict'
+        ctx.body = {
+          error: 'Username conflict'
+        }
       }
 
     } catch (err) {

@@ -10,11 +10,11 @@ const localStrategy = async (username, password, done) => {
     const where = { where: { username: username } }
     const user = await User.findOne(where)
     if (!user) {
-      return done(null, false, { massage: 'Invalid username' })
+      return done(null, false, { error: 'Invalid username' })
     } else if (user.password === utils.md5(password)) {
       return done(null, user)
     } else {
-      return done(null, false, { massage: 'Invalid password' })
+      return done(null, false, { error: 'Invalid password' })
     }
   } catch (err) {
     return done(err, false)
