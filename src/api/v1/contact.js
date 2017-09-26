@@ -1,0 +1,144 @@
+'use strict'
+
+import Contact from '../../models/Contact'
+
+const formatBody = (body, obj) => {
+  const { name, DOB, address, email } = body
+  name && (obj.name = name)
+  DOB && (obj.DOB = DOB)
+  address && (obj.address = address)
+  email && (obj.email = email)
+}
+
+/**
+ * Get contact list.
+ *
+ * @param {any} ctx
+ * @param {any} next
+ */
+const getContacts = async (ctx, next) => {
+  const user = ctx.req.user
+  const contacts = await Contact.find({ _owner: user.id })
+  ctx.rest({
+    success: true,
+    total: contacts.length,
+    data: contacts
+  })
+}
+
+/**
+ * Create a contact.
+ *
+ * @param {any} ctx
+ * @param {any} next
+ */
+const createContact = async (ctx, next) => {
+  const user = ctx.req.user
+  const obj = {
+    _owner: user.id,
+    createdAt: Date.now()
+  }
+  formatBody(ctx.request.body, obj)
+  if (obj.name) {
+    try {
+      const contact = new Contact(obj)
+      const ret = await contact.save()
+      ctx.rest({
+        success: true,
+        data: ret
+      })
+    } catch (error) {
+      console.error(error)
+      ctx.status = 500
+      ctx.body = 'INTERNAL SERVER ERROR'
+    }
+  } else {
+    ctx.status = 400
+    ctx.body = {
+      error: 'Name is required'
+    }
+  }
+}
+
+/**
+ * Delete contact.
+ *
+ * @param {any} ctx
+ * @param {any} next
+ */
+const deleteContact = async (ctx, next) => {
+  const id = ctx.params.id
+  if (id.length != 24) {
+    ctx.status = 404
+    return
+  }
+  const user = ctx.req.user
+  try {
+    const contact = await Contact.findById(id)
+    if (contact) {
+      if (contact._owner === user.id) {
+        await Contact.remove({ _id: id, _owner: user.id })
+        ctx.status = 204
+        ctx.body = ''
+      } else {
+        ctx.status = 403
+        ctx.body = 'Forbidden'
+      }
+    } else {
+      ctx.status = 404
+    }
+  } catch (error) {
+    console.error(error)
+    ctx.status = 500
+    ctx.body = 'INTERNAL SERVER ERROR'
+  }
+}
+
+/**
+ * Update contact.
+ *
+ * @param {any} ctx
+ * @param {any} next
+ */
+const updateContact = async (ctx, next) => {
+  const id = ctx.params.id
+  if (id.length != 24) {
+    ctx.status = 404
+    return
+  }
+  const user = ctx.req.user
+  const obj = {}
+  formatBody(ctx.request.body, obj)
+  try {
+    const contact = await Contact.findById(id)
+    if (contact) {
+      if (contact._owner === user.id) {
+        contact.set(obj);
+        const ret = await contact.save()
+        ctx.status = 201
+        ctx.body = ret
+      } else {
+        ctx.status = 403
+        ctx.body = 'Forbidden'
+      }
+    } else {
+      ctx.status = 404
+    }
+  } catch (error) {
+    console.error(error)
+    ctx.status = 500
+    ctx.body = 'INTERNAL SERVER ERROR'
+  }
+}
+
+const map = {
+  'GET /api/v1/contacts': getContacts,
+  'PATCH /api/v1/contacts/:id': updateContact,
+  'POST /api/v1/contacts': createContact,
+  'DELETE /api/v1/contacts/:id': deleteContact,
+}
+
+
+module.exports = map
+
+
