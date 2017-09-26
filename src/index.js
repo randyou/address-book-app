@@ -9,6 +9,11 @@ import auth from './auth'
 import passport from './auth/passport'
 import permission from './auth/permission'
 
+process.on('uncaughtException', (err) => {
+  console.error(err)
+  process.exit(-1)
+})
+
 const app = new Koa()
 
 app.proxy = true
