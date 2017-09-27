@@ -30,6 +30,28 @@ const getContacts = async (ctx, next) => {
 }
 
 /**
+ * Get contact by id
+ *
+ * @param {any} ctx
+ * @param {any} next
+ */
+const getContactById = async (ctx, next) => {
+  const id = ctx.params.id
+  const user = ctx.req.user
+  const contact = await Contact.findOne({ _id: id }).exec()
+  if (!contact) {
+    ctx.throw(404)
+  }
+  if (contact._owner !== user.id) {
+    ctx.throw(403)
+  }
+  ctx.rest({
+    success: true,
+    data: contact
+  })
+}
+
+/**
  * Create a contact.
  *
  * @param {any} ctx
@@ -136,6 +158,7 @@ const updateContact = async (ctx, next) => {
 
 const map = {
   'GET /api/v1/contacts': getContacts,
+  'GET /api/v1/contacts/:id': getContactById,
   'PATCH /api/v1/contacts/:id': updateContact,
   'POST /api/v1/contacts': createContact,
   'DELETE /api/v1/contacts/:id': deleteContact,
