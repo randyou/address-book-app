@@ -15,7 +15,7 @@ const contactSchema = new Schema({
   email: String,
   createdAt: Number,
   updatedAt: Number,
-  _owner: Object
+  _owner: String
 });
 
 contactSchema.pre('save', function (next) {
