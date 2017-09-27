@@ -23,5 +23,4 @@ app.use(auth.routes())
 app.use(rest.restify('/api/'))
 app.use(api('v1'))
 
-app.listen(3000)
-console.log('App stated at port 3000...')
+export default app
