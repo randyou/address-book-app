@@ -2,6 +2,7 @@
 
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
+import cors from 'koa-cors'
 import api from './api'
 import rest from './api/rest'
 import auth from './auth'
@@ -15,6 +16,7 @@ process.on('uncaughtException', (err) => {
 const app = new Koa()
 
 app.proxy = true
+app.use(cors())
 app.use(bodyParser())
 app.use(passport.initialize())
 app.use(auth.routes())
