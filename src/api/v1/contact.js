@@ -142,7 +142,7 @@ const updateContact = async (ctx, next) => {
         contact.set(obj);
         const ret = await contact.save()
         ctx.status = 201
-        ctx.body = ctx.rest(ret)
+        ctx.rest(ret)
       } else {
         ctx.status = 403
         ctx.body = 'Forbidden'
