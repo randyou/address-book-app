@@ -8,7 +8,9 @@
   "scripts": {
     "start": "node dist/start.js",
     "dev": "babel-node src/start.js",
-    "build": "del ./dist/* && babel src -d dist --source-maps"
+    "build": "del ./dist/* && babel src -d dist --source-maps",
+    "test": "mocha --compilers js:babel-core/register",
+    "postinstall": "babel src -d dist"
   },
   "dependencies": {
     "jsonwebtoken": "^8.0.1",
@@ -41,5 +43,10 @@
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1"
+  },
+  "engines": {
+    "node": "8.5.0",
+    "npm": "5.3.0",
+    "yarn": "1.0.2"
   }
 }
