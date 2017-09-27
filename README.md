@@ -174,4 +174,6 @@ curl -X DELETE http://localhost:3000/api/v1/contacts/59cbd9c28ea9671f8cbdec0c -H
 ```bash
 curl -X POST https://randy-address-book-app.herokuapp.com/auth/register -H 'Content-type:application/json' -d '{"username":"test01","password":"123456"}'
 ```
+## License
 
+  [MIT](LICENSE)
