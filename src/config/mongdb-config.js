@@ -1,6 +1,6 @@
 'use strict'
 
-const uri = 'mongodb://localhost/addressbook'
+const uri = process.env.MONGODB_URI || 'mongodb://localhost/addressbook'
 
 export default {
   uri
