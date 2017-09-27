@@ -6,7 +6,6 @@ import uuid from 'uuid'
 import passport from './passport'
 import User from '../models/User'
 import utils from '../utils'
-import permission from './permission'
 import jwtconfig from '../config/jwt-config'
 
 const router = new Router()
