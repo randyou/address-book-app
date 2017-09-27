@@ -2,4 +2,6 @@
 
 import User from './models/User'
 
-User.sync()
+const force = process.env.NODE_ENV = 'development' ? true : false
+
+User.sync({ force: force })

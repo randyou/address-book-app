@@ -1,34 +1,34 @@
 'use strict'
 
+import jwt from 'jsonwebtoken'
 import Router from 'koa-router'
 import uuid from 'uuid'
 import passport from './passport'
 import User from '../models/User'
 import utils from '../utils'
 import permission from './permission'
+import jwtconfig from '../config/jwt-config'
 
 const router = new Router()
 
 /**
- * login
+ * accesstoken
  */
-router.post('/auth/login', async (ctx, next) => {
-  return passport.authenticate('local', (err, user, info, status) => {
+router.post('/auth/accesstoken', async (ctx, next) => {
+  return passport.authenticate('local', async (err, user, info, status) => {
     if (user) {
-      ctx.body = 'Successfully login'
-      return ctx.login(user)
+      const token = jwt.sign({ userid: user.id }, jwtconfig.secret, {
+        expiresIn: 604800
+      });
+      const u = await user.update({ token: token }, { where: { id: user.id } })
+      ctx.body = {
+        success: true,
+        token: 'Bearer ' + u.token
+      }
     } else {
       ctx.body = info
     }
   })(ctx, next)
-})
-
-/**
- * logout
- */
-router.get('/auth/logout', async (ctx, next) => {
-  ctx.logout()
-  ctx.body = 'Successfully logged out'
 })
 
 /**
@@ -40,7 +40,7 @@ router.post('/auth/register', async (ctx, next) => {
   if (!/^[\w\d]{5,}$/i.test(username)) {
     ctx.status = 400
     ctx.body = {
-      error:'Invalid username'
+      error: 'Invalid username'
     }
     return
   }
@@ -53,6 +53,7 @@ router.post('/auth/register', async (ctx, next) => {
         id: uuid.v4(),
         username: username,
         password: utils.md5(password),
+        token: null,
         createdAt: now,
         updatedAt: now
       }

@@ -13,6 +13,7 @@ const User = mysql.define('user', {
     unique: true
   },
   password: Sequelize.STRING(100),
+  token: Sequelize.STRING(255),
   createdAt: Sequelize.BIGINT,
   updatedAt: Sequelize.BIGINT
 },
