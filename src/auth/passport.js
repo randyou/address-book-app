@@ -61,13 +61,5 @@ passport.deserializeUser((user, done) => {
   return done(null, user)
 })
 
-const isBearerAuthenticated = function () {
-  return passport.authenticate('bearer', { session: false })
-}
-
-const isLocalAuthenticated = () => {
-  return passport.authenticate('local', { session: true })
-}
-
 export default passport
 
