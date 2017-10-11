@@ -20,7 +20,15 @@ npm run build
 # serve for production with hot at localhost:3000
 npm run start
 ```
+## Demo
 
+- [https://randy-address-book-app.herokuapp.com/](https://randy-address-book-app.herokuapp.com/)
+
+- Register an account like below:
+
+```bash
+curl -X POST https://randy-address-book-app.herokuapp.com/auth/register -H 'Content-type:application/json' -d '{"username":"test01","password":"123456"}'
+```
 ## Usage
 
 ### Register an account.
@@ -165,15 +173,7 @@ curl -X PATCH http://localhost:3000/api/v1/contacts/59cbd9c28ea9671f8cbdec0c -H 
 curl -X DELETE http://localhost:3000/api/v1/contacts/59cbd9c28ea9671f8cbdec0c -H 'Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIyMDVlZDEzMi1kYTdiLTQ3ZmEtODQ3Mi1kZGI3NjJlZTA3MjIiLCJpYXQiOjE1MDY1MzExMDgsImV4cCI6MTUwNzEzNTkwOH0.z7e0tyP_BtMErP9uDhRc7ihM-z2Jc5kRbrdY8_qYVJg'
 ```
 
-## Demo domain
 
-- [https://randy-address-book-app.herokuapp.com/](https://randy-address-book-app.herokuapp.com/)
-
-- Register an account like below:
-
-```bash
-curl -X POST https://randy-address-book-app.herokuapp.com/auth/register -H 'Content-type:application/json' -d '{"username":"test01","password":"123456"}'
-```
 ## License
 
   [MIT](LICENSE)
