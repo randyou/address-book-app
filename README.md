@@ -1,7 +1,7 @@
  
 # AddressBook app
 
-**An address book app.**
+**A RESTful api of address book app.**
  
 
 #### Build Setup
